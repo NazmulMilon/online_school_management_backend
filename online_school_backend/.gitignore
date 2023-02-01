@@ -1,6 +1,7 @@
 .env
 venv/
 idea/
+.idea/
 pycache/
 __pycache__/
 .__pycache__/
