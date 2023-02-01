@@ -1,0 +1,1 @@
+<h3>Online School Management System Backend using Django REST Framework </h3>
