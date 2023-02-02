@@ -170,3 +170,27 @@ class TeacherListAllSerializer(ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ["fullname", "email", "username", "phone_no", "user_role"]
+
+
+class ParentListSerializer(ModelSerializer):
+    email = SerializerMethodField()
+    fullname = SerializerMethodField()
+    username = SerializerMethodField()
+
+    def get_email(self, instance):
+        return instance.user.email if instance.user else None
+
+    def get_fullname(self, instance):
+        name = ""
+        if instance.user.first_name:
+            name += instance.user.first_name + " "
+        if instance.user.last_name:
+            name += instance.user.last_name
+        return name
+
+    def get_username(self, instance):
+        return instance.user.username if instance.user else None
+
+    class Meta:
+        model = UserProfile
+        fields = ["fullname", "email", "username", "phone_no", "user_role"]
