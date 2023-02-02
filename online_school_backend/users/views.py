@@ -15,8 +15,8 @@ class UserProfileListAPIView(ListAPIView):
     queryset = UserProfile.objects.all()
 
     def get(self, request, *args, **kwargs):
-        self.queryset = self.queryset
-        serializer = UserProfileListSerializer(self.queryset, many=True)
+        queryset = UserProfile.objects.all()
+        serializer = UserProfileListSerializer(queryset, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
