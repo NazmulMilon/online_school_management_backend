@@ -133,17 +133,9 @@ class StudentRetrieveSerializer(ModelSerializer):
 
 
 class TeacherListAllSerializer(ModelSerializer):
-    # first_name = SerializerMethodField()
-    # last_name = SerializerMethodField()
     email = SerializerMethodField()
     fullname = SerializerMethodField()
     username = SerializerMethodField()
-
-    # def get_first_name(self, instance):
-    #     return instance.user.first_name if instance.user else None
-    #
-    # def get_last_name(self, instance):
-    #     return instance.user.last_name if instance.user else None
 
     def get_email(self, instance):
         return instance.user.email if instance.user else None
