@@ -39,7 +39,7 @@ class UserProfileCreateSerializer(ModelSerializer):
 class UserProfileListSerializer(ModelSerializer):
     class Meta:
         model = UserProfile
-        exclude = ['created_at', 'updated_at']
+        exclude = ['created_at', 'updated_at', 'father_name', 'mother_name', 'roll']
 
 
 class UserProfileRetrieveSerializer(ModelSerializer):
