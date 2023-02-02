@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from .models import UserProfile
 from systems.enums import UserType
 from .serializers import UserProfileListSerializer, UserProfileRetrieveSerializer, UserProfileCreateSerializer, \
-    StudentListAllSerializer
+    StudentListAllSerializer, StudentRetrieveSerializer
 from rest_framework.generics import CreateAPIView, UpdateAPIView, ListAPIView, RetrieveAPIView
 from rest_framework import status
 from rest_framework.response import Response
@@ -94,3 +94,15 @@ class StudentListAllAPIView(ListAPIView):
         queryset = UserProfile.objects.filter(user_role=value).order_by('roll')
         serializer = StudentListAllSerializer(queryset, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class StudentRetrieveAPIView(RetrieveAPIView):
+    serializer_class = StudentRetrieveSerializer
+    queryset = UserProfile.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
+        student_obj = UserProfile.objects.filter(pk=pk).first()
+        serializer = StudentRetrieveSerializer(student_obj)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
