@@ -78,4 +78,4 @@ class UserProfileRetrieveSerializer(ModelSerializer):
 class StudentListAllSerializer(ModelSerializer):
     class Meta:
         model = UserProfile
-        exclude = ['created_at', 'updated_at']
+        fields = "__all__"
