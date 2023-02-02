@@ -20,3 +20,20 @@ class UserProfileListAPIView(ListAPIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
+class UserProfileRetrieveAPIView(RetrieveAPIView):
+    serializer_class = UserProfileRetrieveSerializer
+    queryset = UserProfile.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('value', None)
+        user_obj = UserProfile.objects.filter(pk=pk)
+        serializer = UserProfileRetrieveSerializer(user_obj)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class UserProfileCreateAPIView(CreateAPIView):
+    serializer_class = UserProfileCreateSerializer
+    queryset = UserProfile.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        pass
