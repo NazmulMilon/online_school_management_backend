@@ -26,7 +26,7 @@ class UserProfileRetrieveAPIView(RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         pk = kwargs.get('value', None)
-        user_obj = UserProfile.objects.filter(pk=pk)
+        user_obj = UserProfile.objects.filter(pk=pk).first()
         serializer = UserProfileRetrieveSerializer(user_obj)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
