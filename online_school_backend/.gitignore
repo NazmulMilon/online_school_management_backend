@@ -1,9 +1,7 @@
 .env
 venv/
-idea/
 .idea/
 pycache/
 __pycache__/
 .__pycache__/
 .__init__.cpython-38.pyc
-.idea/dataSources.xml
