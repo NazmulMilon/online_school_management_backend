@@ -117,3 +117,14 @@ class TeacherListAllAPIView(ListAPIView):
         teacher_queryset = UserProfile.objects.filter(user_role=value)
         serializer = TeacherListAllSerializer(teacher_queryset, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class ParentListAllAPIView(ListAPIView):
+    serializer_class = ParentListSerializer
+    queryset = UserProfile.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        value = "PARENT"
+        parent_queryset = UserProfile.objects.filter(user_role=value)
+        serializer = ParentListSerializer(parent_queryset, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
