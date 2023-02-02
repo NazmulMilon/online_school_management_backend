@@ -104,4 +104,5 @@ class StudentListAllSerializer(ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = "__all__"
+        fields = ["roll", "fullname", "email", "username", "phone_no"]
+
