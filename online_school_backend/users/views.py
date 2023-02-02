@@ -2,10 +2,12 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from .models import UserProfile
 from systems.enums import UserType
-from .serializers import UserProfileListSerializer, UserProfileRetrieveSerializer, UserProfileCreateSerializer
+from .serializers import UserProfileListSerializer, UserProfileRetrieveSerializer, UserProfileCreateSerializer, \
+    StudentListAllSerializer
 from rest_framework.generics import CreateAPIView, UpdateAPIView, ListAPIView, RetrieveAPIView
 from rest_framework import status
 from rest_framework.response import Response
+from django.db import transaction
 
 
 # Create your views here.
@@ -81,9 +83,14 @@ class UserProfileRetrieveAPIView(RetrieveAPIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
-class UserProfileCreateAPIView(CreateAPIView):
-    serializer_class = UserProfileCreateSerializer
+class StudentListAllAPIView(ListAPIView):
+    serializer_class = StudentListAllSerializer
     queryset = UserProfile.objects.all()
 
-    def post(self, request, *args, **kwargs):
-        pass
+    def get(self, request, *args, **kwargs):
+        value = kwargs.get('STUDENT', None)
+        if value != "STUDENT":
+            return Response(data={'details': 'Student type wrong.'}, status=status.HTTP_400_BAD_REQUEST)
+        queryset = UserProfile.objects.filter(user_role=value).order_by('roll')
+        serializer = StudentListAllSerializer(queryset, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
