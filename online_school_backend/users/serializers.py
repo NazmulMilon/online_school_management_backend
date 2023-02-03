@@ -37,6 +37,16 @@ class UserProfileCreateSerializer(ModelSerializer):
 
 
 class UserProfileListSerializer(ModelSerializer):
+    fullname = SerializerMethodField()
+
+    def get_fullname(self, instance):
+        name = ""
+        if instance.user.first_name:
+            name += instance.user.first_name + " "
+        if instance.user.last_name:
+            name += instance.user.last_name
+        return name
+
     class Meta:
         model = UserProfile
         exclude = ['created_at', 'updated_at', 'father_name', 'mother_name', 'roll']
