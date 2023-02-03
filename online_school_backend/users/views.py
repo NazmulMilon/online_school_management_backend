@@ -33,7 +33,7 @@ class UserProfileCreateAPIView(CreateAPIView):
         mother_name = data.get('mother_name', None)
         if mother_name is None:
             return Response(data={'details': "User's mother's name required. "}, status=status.HTTP_406_NOT_ACCEPTABLE)
-        email = data.get('mother_name', None)
+        email = data.get('email', None)
         password = data.get('password', None)
         date_of_birth = data.get('date_of_birth', None)
         phone_no = data.get('phone_no', None)
@@ -44,7 +44,7 @@ class UserProfileCreateAPIView(CreateAPIView):
         # roll = data.get('roll', None)
         roll = None
         if user_role == "STUDENT":
-            obj = UserProfile.objects.filter(user_role=user_role).last()
+            obj = UserProfile.objects.filter(user_role=user_role).order_by('roll').last()
             if obj:
                 roll = obj.roll + 1
             else:
