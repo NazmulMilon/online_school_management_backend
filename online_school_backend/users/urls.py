@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import UserProfileRetrieveAPIView, UserProfileCreateAPIView, UserProfileListAPIView, StudentListAllAPIView
+from .views import UserProfileRetrieveAPIView, UserProfileCreateAPIView, UserProfileListAPIView, StudentListAllAPIView, \
+    StudentRetrieveAPIView, TeacherListAllAPIView, ParentListAllAPIView, ParentRetrieveAPIView
 
 urlpatterns = [
     path('userprofile/all/', UserProfileListAPIView.as_view(), name="all_userprofile"),
@@ -15,6 +16,7 @@ urlpatterns = [
 
     # parents
     path('parent/all/', ParentListAllAPIView.as_view(), name="all_parents"),
+    path('parent/detail/<int:pk>/', ParentRetrieveAPIView.as_view(), name="retrieve_parent"),
 
 
 
