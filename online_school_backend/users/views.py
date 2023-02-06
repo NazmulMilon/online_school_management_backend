@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from .models import UserProfile
 from systems.enums import UserType
 from .serializers import UserProfileListSerializer, UserProfileRetrieveSerializer, UserProfileCreateSerializer, \
-    StudentListAllSerializer, StudentRetrieveSerializer, TeacherListAllSerializer
+    StudentListAllSerializer, StudentRetrieveSerializer, TeacherListAllSerializer, ParentListSerializer, \
+    ParentRetrieveSerializer
 from rest_framework.generics import CreateAPIView, UpdateAPIView, ListAPIView, RetrieveAPIView
 from rest_framework import status
 from rest_framework.response import Response
@@ -127,4 +128,15 @@ class ParentListAllAPIView(ListAPIView):
         value = "PARENT"
         parent_queryset = UserProfile.objects.filter(user_role=value)
         serializer = ParentListSerializer(parent_queryset, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class ParentRetrieveAPIView(RetrieveAPIView):
+    serializer_class = ParentRetrieveSerializer
+    queryset = UserProfile.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        value = kwargs.get('pk', None)
+        parent_obj = UserProfile.objects.filter(pk=value).first()
+        serializer = ParentRetrieveSerializer(parent_obj)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
