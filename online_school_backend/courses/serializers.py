@@ -1,4 +1,5 @@
-from .models import Course
+from django.contrib.auth.models import User
+from .models import Course, Enrolment
 from rest_framework.serializers import ModelSerializer
 from rest_framework.serializers import SerializerMethodField
 
@@ -61,6 +62,12 @@ class UserRetrieveSerializer(ModelSerializer):
         queryset = Course.objects.filter(id=instance.course_id)
         return CourseListSerializer(queryset, many=True).data
 
+    class Meta:
+        model = Enrolment
+        exclude = ['created_at', 'updated_at']
+
+
+class EnrollmentSerializer(ModelSerializer):
     class Meta:
         model = Enrolment
         exclude = ['created_at', 'updated_at']
