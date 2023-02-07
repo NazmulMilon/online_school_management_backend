@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CourseListAPIView, EnrollmentListAPIView
+from .views import CourseListAPIView, EnrollmentListAPIView, EnrollmentCreateAPIView
 
 urlpatterns = [
     path('course/all/', CourseListAPIView.as_view(), name='all_course'),
@@ -7,4 +7,5 @@ urlpatterns = [
 
     # enrollment
     path('enrollment/all/', EnrollmentListAPIView().as_view(), name='all_enrollment'),
+    path('enrollment/create/', EnrollmentCreateAPIView.as_view(), name='create_enrollment'),
 ]
