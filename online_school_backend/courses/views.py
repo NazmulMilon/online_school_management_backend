@@ -19,7 +19,7 @@ class CourseListAPIView(ListAPIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
-class EnrolmentListAPIView(ListAPIView):
+class EnrolmentRetrieveAPIView(ListAPIView):
     serializer_class = EnrolmentListSerializer
     queryset = Enrolment.objects.all()
 
