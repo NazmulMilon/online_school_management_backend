@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Course, Enrolment
 from .serializers import CourseCreateSerializer, CourseRetrieveSerializer, CourseListSerializer, EnrolmentListSerializer, \
-    UserRetrieveSerializer, EnrolmentSerializer
+    UserRetrieveSerializer, EnrolmentSerializer, EnrollmentSerializer
 from rest_framework.generics import CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -39,3 +39,14 @@ class EnrolmentListAPIView(ListAPIView):
         serializer = EnrolmentListSerializer(queryset, many=False)
         # return Response(data=data, status=status.HTTP_200_OK)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class EnrollmentListAPIView(ListAPIView):
+    queryset = Enrolment.objects.all()
+    serializer_class = EnrollmentSerializer
+
+    def get(self, request, *args, **kwargs):
+        queryset = Enrolment.objects.all()
+        serializer = EnrollmentSerializer(queryset, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
