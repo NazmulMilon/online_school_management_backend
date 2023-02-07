@@ -59,7 +59,7 @@ class EnrollmentCreateAPIView(CreateAPIView):
         if not course_obj:
             return Response(data={'details': 'Course ID does not matched. Enter valid course id'},
                             status=status.HTTP_406_NOT_ACCEPTABLE)
-        exist_obj = Enrolment.objects.filter(user_id=user, course_id=course).exists()
+        exist_obj = Enrolment.objects.filter(user_id=user_obj.user, course_id=course_obj.course).exists()
         if exist_obj:
             return Response(data={'details': 'User already have taken the course.'},
                             status=status.HTTP_406_NOT_ACCEPTABLE)
