@@ -9,7 +9,7 @@ urlpatterns = [
 
     # student
     path('student/all/<str:STUDENT>/', StudentListAllAPIView.as_view(), name="all_students"),
-    path('student/retrieve/<int:pk>/', StudentRetrieveAPIView.as_view(), name="retrieve_student"),
+    path('student/retrieve/<int:roll>/', StudentRetrieveAPIView.as_view(), name="retrieve_student"),
 
     # teachers
     path('teacher/all/<str:TEACHER>/', TeacherListAllAPIView.as_view(), name="all_teachers"),
