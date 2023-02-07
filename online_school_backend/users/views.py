@@ -102,8 +102,10 @@ class StudentRetrieveAPIView(RetrieveAPIView):
     queryset = UserProfile.objects.all()
 
     def get(self, request, *args, **kwargs):
-        pk = kwargs.get('pk', None)
-        student_obj = UserProfile.objects.filter(pk=pk).first()
+        roll_id = kwargs.get('roll', None)
+        student_obj = UserProfile.objects.filter(user_role="STUDENT", roll=roll_id).first()
+        if student_obj is None:
+            return Response(data={'details': 'No student found regarding this roll number.'})
         serializer = StudentRetrieveSerializer(student_obj)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
