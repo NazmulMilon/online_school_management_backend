@@ -139,6 +139,8 @@ class ParentRetrieveAPIView(RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         value = kwargs.get('pk', None)
-        parent_obj = UserProfile.objects.filter(pk=value).first()
+        parent_obj = UserProfile.objects.filter(user_role="PARENT", pk=value).first()
+        if parent_obj is None:
+            return Response(data={'details': 'No parent found.'})
         serializer = ParentRetrieveSerializer(parent_obj)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
