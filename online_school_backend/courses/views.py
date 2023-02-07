@@ -47,6 +47,13 @@ class EnrollmentCreateAPIView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         data = request.data
+        user = data.get('user', None)
+        course = data.get('course', None)
+
+        enrollment_obj = Enrolment(user_id=user, course_id=course)
+        enrollment_obj.save()
+        serializer = EnrollmentSerializer(enrollment_obj)
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
 
 class EnrollmentListAPIView(ListAPIView):
