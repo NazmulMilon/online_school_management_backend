@@ -182,7 +182,7 @@ class ParentRetrieveSerializer(ModelSerializer):
         model = UserProfile
         # fields = ["roll", "first_name", "last_name", "fullname", "email", "username", "father_name", "mother_name",
         #           "date_of_birth", "phone_no", "user_role", "address"]
-        exclude = ['created_at', 'updated_at']
+        exclude = ['created_at', 'updated_at', 'roll']
 
 
 class StudentListAllSerializer(ModelSerializer):
@@ -206,13 +206,13 @@ class StudentListAllSerializer(ModelSerializer):
 
     class Meta:
         model = UserProfile
-        fields = ["id", "roll", "fullname", "email", "username", "phone_no"]
+        fields = ["id", "roll", "fullname", "email", "username", "phone_no", "user_role"]
 
 
 class ParentSerializer(ModelSerializer):
     class Meta:
         model = UserProfile
-        exclude = ['created_at', 'updated_at', 'parent']
+        exclude = ['created_at', 'updated_at', 'parent', 'roll']
 
 
 class StudentRetrieveSerializer(ModelSerializer):
