@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.contrib.auth.models import User
+from users.models import UserProfile
 from .models import Course, Enrolment
 from .serializers import CourseCreateSerializer, CourseRetrieveSerializer, CourseListSerializer, EnrolmentListSerializer, \
     UserRetrieveSerializer, EnrolmentSerializer, EnrollmentSerializer
@@ -48,9 +50,21 @@ class EnrollmentCreateAPIView(CreateAPIView):
     def post(self, request, *args, **kwargs):
         data = request.data
         user = data.get('user', None)
-        course = data.get('course', None)
+        user_obj = UserProfile.objects.filter(id=user, user_role='STUDENT').first()
+        if not user_obj:
+            return Response(data={'details': 'User does not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-        enrollment_obj = Enrolment(user_id=user, course_id=course)
+        course = data.get('course', None)
+        course_obj = Course.objects.filter(id=course).exists()
+        if not course_obj:
+            return Response(data={'details': 'Course ID does not matched. Enter valid course id'},
+                            status=status.HTTP_406_NOT_ACCEPTABLE)
+        exist_obj = Enrolment.objects.filter(user_id=user, course_id=course).exists()
+        if exist_obj:
+            return Response(data={'details': 'User already have taken the course.'},
+                            status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        enrollment_obj = Enrolment(user_id=user_obj.user_id, course_id=course)
         enrollment_obj.save()
         serializer = EnrollmentSerializer(enrollment_obj)
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
