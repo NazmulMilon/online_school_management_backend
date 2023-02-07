@@ -3,4 +3,8 @@ from .views import CourseListAPIView
 
 urlpatterns = [
     path('course/all/', CourseListAPIView.as_view(), name='all_course'),
+
+
+    # enrollment
+    path('enrollment/all/', EnrollmentListAPIView().as_view(), name='all_enrollment'),
 ]
