@@ -41,6 +41,14 @@ class EnrolmentListAPIView(ListAPIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
+class EnrollmentCreateAPIView(CreateAPIView):
+    queryset = Enrolment.objects.all()
+    serializer_class = EnrollmentSerializer
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+
+
 class EnrollmentListAPIView(ListAPIView):
     queryset = Enrolment.objects.all()
     serializer_class = EnrollmentSerializer
