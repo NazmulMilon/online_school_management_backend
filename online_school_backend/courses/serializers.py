@@ -36,6 +36,8 @@ class EnrolmentSerializer(ModelSerializer):
 
 class EnrolmentListSerializer(ModelSerializer):
     user = SerializerMethodField()
+    fullname = SerializerMethodField()
+    username = SerializerMethodField()
     course = SerializerMethodField()
 
     def get_course(self, instance):
@@ -49,6 +51,17 @@ class EnrolmentListSerializer(ModelSerializer):
 
     def get_user(self, instance):
         return instance.user.id
+
+    def get_fullname(self, instance):
+        name = ""
+        if instance.user.first_name:
+            name += instance.user.first_name + " "
+        if instance.user.last_name:
+            name += instance.user.last_name
+        return name
+
+    def get_username(self, instance):
+        return instance.user.username if instance.user else ""
 
     class Meta:
         model = Enrolment
