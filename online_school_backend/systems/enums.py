@@ -26,3 +26,10 @@ class UserType(BaseEnum):
     TEACHER_TYPE = "TEACHER"
     PARENT_TYPE = "PARENT"
 
+
+class AttendanceType(BaseEnum):
+    PRESENT = "present"
+    ABSENT = "absent"
+
+
+
