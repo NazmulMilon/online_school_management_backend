@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from users.models import UserProfile
 from .models import Course, Enrolment
 from rest_framework.serializers import ModelSerializer
 from rest_framework.serializers import SerializerMethodField
@@ -44,7 +45,7 @@ class EnrolmentListSerializer(ModelSerializer):
         course_id_list = []
         enrol_qs = Enrolment.objects.filter(user=instance.user).values("course")
         for item in enrol_qs:
-            if item["course"] and item["course"] not in course_id_list:
+            if item["course"] not in course_id_list:
                 course_id_list.append(item["course"])
         course_queryset = Course.objects.filter(pk__in=course_id_list)
         return CourseListSerializer(course_queryset, many=True).data
@@ -68,6 +69,36 @@ class EnrolmentListSerializer(ModelSerializer):
         exclude = ['id', 'created_at', 'updated_at']
 
 
+class EnrolmentRetrieveByCourseSerializer(ModelSerializer):
+    user = SerializerMethodField()
+    course_code = SerializerMethodField()
+    course_name = SerializerMethodField()
+    total_enrollment = SerializerMethodField()
+
+    def get_user(self, instance):
+        user_id_list = []
+        enrolment_qs = Enrolment.objects.filter(course=instance.course).values('user_id')
+        for item in enrolment_qs:
+            if item["user_id"] not in user_id_list:
+                user_id_list.append(item["user_id"])
+        user_queryset = UserProfile.objects.filter(pk__in=user_id_list)
+        return UserProfileListSerializer(user_queryset, many=True).data
+
+    def get_course_code(self, instance):
+        return instance.course.course_code if instance.course else ""
+
+    def get_course_name(self, instance):
+        return instance.course.course_name if instance.course else ""
+
+    def get_total_enrollment(self, instance):
+        enrolment_qs = Enrolment.objects.filter(course=instance.course).values('user_id')
+        return len(enrolment_qs)
+
+    class Meta:
+        model = Enrolment
+        exclude = ['created_at', 'updated_at']
+
+
 class UserRetrieveSerializer(ModelSerializer):
     course = SerializerMethodField()
 
@@ -84,3 +115,10 @@ class EnrollmentSerializer(ModelSerializer):
     class Meta:
         model = Enrolment
         exclude = ['created_at', 'updated_at']
+
+
+class UserProfileListSerializer(ModelSerializer):
+    class Meta:
+        model = UserProfile
+        exclude = ['created_at', 'updated_at', 'father_name', "date_of_birth", 'mother_name', 'phone_no', 'user_role',
+                   'address', 'parent']
