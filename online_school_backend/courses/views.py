@@ -2,8 +2,9 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from users.models import UserProfile
 from .models import Course, Enrolment
-from .serializers import CourseCreateSerializer, CourseRetrieveSerializer, CourseListSerializer, EnrolmentListSerializer, \
-    UserRetrieveSerializer, EnrolmentSerializer, EnrollmentSerializer
+from .serializers import CourseCreateSerializer, CourseRetrieveSerializer, CourseListSerializer, \
+    EnrolmentListSerializer, \
+    UserRetrieveSerializer, EnrolmentSerializer, EnrollmentSerializer, EnrolmentRetrieveByCourseSerializer
 from rest_framework.generics import CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -24,7 +25,7 @@ class EnrolmentRetrieveAPIView(ListAPIView):
     queryset = Enrolment.objects.all()
 
     def get(self, request, *args, **kwargs):
-        pk = kwargs.get('pk', None)
+        pk = kwargs.get('user', None)
         data = dict()
         queryset = Enrolment.objects.filter(user_id=pk).first()
 
@@ -39,6 +40,32 @@ class EnrolmentRetrieveAPIView(ListAPIView):
         # data["user"] = pk
         # data["course"] = course_list
         serializer = EnrolmentListSerializer(queryset, many=False)
+        # return Response(data=data, status=status.HTTP_200_OK)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class EnrolmentRetrieveByCourseAPIView(RetrieveAPIView):
+    serializer_class = EnrolmentRetrieveByCourseSerializer
+    queryset = Enrolment.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        course = kwargs.get('course', None)
+        enrolment_obj = Enrolment.objects.filter(course_id=course).first()
+        # data = dict()
+        # user_list = []
+        # queryset = Enrolment.objects.filter(course_id=course)
+        # amount = len(queryset)
+        # for item in queryset:
+        #     user_dict={}
+        #     user_dict["user_id"] = item.user_id
+        #     user_dict["user_name"] = item.user.first_name
+        #     user_list.append(user_dict)
+        # data["course"] = course
+        # data["total_enrollment"] = amount
+        # data["user"] = user_list
+        #
+        # # serializer = EnrolmentRetrieveByCourseSerializer(queryset)
+        serializer = EnrolmentRetrieveByCourseSerializer(enrolment_obj)
         # return Response(data=data, status=status.HTTP_200_OK)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
