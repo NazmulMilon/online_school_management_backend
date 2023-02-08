@@ -59,12 +59,12 @@ class EnrollmentCreateAPIView(CreateAPIView):
         if not course_obj:
             return Response(data={'details': 'Course ID does not matched. Enter valid course id'},
                             status=status.HTTP_406_NOT_ACCEPTABLE)
-        exist_obj = Enrolment.objects.filter(user_id=user_obj.user, course_id=course_obj.course).exists()
+        exist_obj = Enrolment.objects.filter(user=user, course=course).exists()
         if exist_obj:
             return Response(data={'details': 'User already have taken the course.'},
                             status=status.HTTP_406_NOT_ACCEPTABLE)
 
-        enrollment_obj = Enrolment(user_id=user_obj.user_id, course_id=course)
+        enrollment_obj = Enrolment(user_id=user, course_id=course)
         enrollment_obj.save()
         serializer = EnrollmentSerializer(enrollment_obj)
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
