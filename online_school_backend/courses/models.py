@@ -13,8 +13,8 @@ class Course(BaseModel):
 
 
 class Enrolment(BaseModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, help_text=' user name')
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, help_text='available courses')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="enrollment_user")
+    course = models.ForeignKey(User, on_delete=models.CASCADE, related_name="course_enrollment")
 
     class Meta:
         db_table = 'enrolments'
