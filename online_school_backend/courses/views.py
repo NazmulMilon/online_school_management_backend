@@ -142,6 +142,17 @@ class AttendanceCreateAPIView(CreateAPIView):
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
 
+class AttendanceRetrieveAPIView(RetrieveAPIView):
+    serializer_class = AttendanceRetrieveSerializer
+    queryset = Attendance.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        course = kwargs.get('pk', None)
+        attendance_obj = Attendance.objects.filter(course_id=course).first()
+        serializer = AttendanceRetrieveSerializer(attendance_obj, many=False)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
 class AttendanceListAPIView(ListAPIView):
     serializer_class = AttendanceListSerializer
     queryset = Attendance.objects.all()
