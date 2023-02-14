@@ -141,6 +141,28 @@ class UserProfileListSerializer(ModelSerializer):
                    'address', 'parent']
 
 
+class AttendanceSerializer(ModelSerializer):
+    # roll = SerializerMethodField()
+    # fullname = SerializerMethodField()
+    #
+    # def get_roll(self, instance):
+    #     student_obj = UserProfile.objects.filter(user_id=instance.student).first()
+    #     return student_obj.roll
+    #
+    # def get_fullname(self, instance):
+    #     name = ""
+    #     if instance.student.first_name:
+    #         name += instance.student.first_name + " "
+    #     if instance.student.last_name:
+    #         name += instance.student.last_name
+    #     return name
+    #     # return instance.student.username if instance.student else ""
+
+    class Meta:
+        model = Attendance
+        exclude = ['created_at', 'updated_at', 'created_by', 'updated_by', 'course', 'teacher']
+
+
 class AttendanceRetrieveSerializer(ModelSerializer):
     teacher = SerializerMethodField()
     course_code = SerializerMethodField()
