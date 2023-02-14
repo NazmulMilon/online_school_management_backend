@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from users.models import UserProfile
-from .models import Course, Enrolment
+from .models import Course, Enrolment, Attendance
 from rest_framework.serializers import ModelSerializer
 from rest_framework.serializers import SerializerMethodField
 from users.serializers import StudentListAllSerializer
@@ -139,6 +139,12 @@ class UserProfileListSerializer(ModelSerializer):
         model = UserProfile
         exclude = ['created_at', 'updated_at', 'father_name', "date_of_birth", 'mother_name', 'phone_no', 'user_role',
                    'address', 'parent']
+
+
+class AttendanceCreateSerializer(ModelSerializer):
+    class Meta:
+        model = Attendance
+        exclude = ['created_at', 'updated_at']
 
 
 class AttendanceListSerializer(ModelSerializer):
