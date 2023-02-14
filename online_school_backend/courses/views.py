@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from users.models import UserProfile
-from .models import Course, Enrolment
+from .models import Course, Enrolment, Attendance
 from .serializers import CourseCreateSerializer, CourseRetrieveSerializer, CourseListSerializer, \
-    EnrolmentListSerializer, \
-    UserRetrieveSerializer, EnrolmentSerializer, EnrollmentSerializer, EnrolmentRetrieveByCourseSerializer
+    EnrolmentListSerializer, UserRetrieveSerializer, EnrolmentSerializer, EnrollmentSerializer, \
+    EnrolmentRetrieveByCourseSerializer, AttendanceListSerializer, AttendanceCreateSerializer, \
+    AttendanceRetrieveSerializer
 from rest_framework.generics import CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -106,3 +107,14 @@ class EnrollmentListAPIView(ListAPIView):
         serializer = EnrollmentSerializer(queryset, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
+
+class AttendanceListAPIView(ListAPIView):
+    serializer_class = AttendanceListSerializer
+    queryset = Attendance.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        date = request.data.get('date', None)
+        queryset = Attendance.objects.filter(created_at__date=date).all()
+        # queryset = Attendance.objects.all()
+        serializer = AttendanceListSerializer(queryset, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
