@@ -141,6 +141,39 @@ class UserProfileListSerializer(ModelSerializer):
                    'address', 'parent']
 
 
+class AttendanceRetrieveSerializer(ModelSerializer):
+    teacher = SerializerMethodField()
+    course_code = SerializerMethodField()
+    course_name = SerializerMethodField()
+    student = SerializerMethodField()
+
+    def get_teacher(self, instance):
+        return instance.teacher.username if instance.teacher else ""
+
+    def get_course_code(self, instance):
+        return instance.course.course_code if instance.course else ""
+
+    def get_course_name(self, instance):
+        return instance.course.course_name if instance.course else ""
+
+    # def get_student(self, instance):
+    #     queryset = Attendance.objects.filter(id=instance.student_id)
+    #     return AttendanceSerializer(queryset, many=True).data
+
+    def get_student(self, instance):
+        student_id_lst = []
+        attendance_qs = Attendance.objects.filter(course=instance.course).values('student_id')
+        for item in attendance_qs:
+            if item['student_id'] not in student_id_lst:
+                student_id_lst.append(item['student_id'])
+        student_qs = UserProfile.objects.filter(pk__in=student_id_lst).order_by('roll')
+        return StudentSerializer(student_qs, many=True).data
+
+    class Meta:
+        model = Attendance
+        exclude = ['created_at', 'updated_at', 'course', 'is_present', 'created_by', 'updated_by']
+
+
 class AttendanceCreateSerializer(ModelSerializer):
     class Meta:
         model = Attendance
