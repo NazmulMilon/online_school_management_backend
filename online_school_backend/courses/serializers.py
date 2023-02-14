@@ -122,3 +122,26 @@ class UserProfileListSerializer(ModelSerializer):
         model = UserProfile
         exclude = ['created_at', 'updated_at', 'father_name', "date_of_birth", 'mother_name', 'phone_no', 'user_role',
                    'address', 'parent']
+
+
+class AttendanceListSerializer(ModelSerializer):
+    teacher = SerializerMethodField()
+    course_code = SerializerMethodField()
+    course_name = SerializerMethodField()
+    student = SerializerMethodField()
+
+    def get_teacher(self, instance):
+        return instance.teacher.username if instance.teacher else ""
+
+    def get_course_code(self, instance):
+        return instance.course.course_code if instance.course else ""
+
+    def get_course_name(self, instance):
+        return instance.course.course_name if instance.course else ""
+
+    def get_student(self, instance):
+        return instance.student.username if instance.student else ""
+
+    class Meta:
+        model = Attendance
+        exclude = ['course', 'created_by', 'updated_by']
