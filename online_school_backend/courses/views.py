@@ -108,6 +108,40 @@ class EnrollmentListAPIView(ListAPIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
+class AttendanceCreateAPIView(CreateAPIView):
+    serializer_class = AttendanceCreateSerializer
+    queryset = Attendance.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        data = request.data
+        teacher = data.get('teacher', None)
+        if teacher is None:
+            return Response(data={'details': 'Teacher name required.'}, status=status.HTTP_406_NOT_ACCEPTABLE)
+        if not UserProfile.objects.filter(user_id=teacher, user_role="TEACHER").exists():
+            return Response(data={'details': 'Teacher not found.'}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        course = data.get('course', None)
+        if course is None:
+            return Response(data={'details': 'Course required.'}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        if not Course.objects.filter(id=course).exists():
+            return Response(data={'details': 'course not found.'}, status=status.HTTP_406_NOT_ACCEPTABLE)
+        student = data.get('student', None)
+        if student is None:
+            return Response(data={'details': 'Student name required.'}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        if not UserProfile.objects.filter(id=student, user_role="STUDENT").exists():
+            return Response(data={'details': 'student does not found.'}, status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        is_present = data.get('is_present', None)
+
+        attendance_obj = Attendance(teacher_id=teacher, course_id=course, student_id=student, is_present=is_present,
+                                    created_by_id=teacher, updated_by_id=teacher)
+        attendance_obj.save()
+        serializer = AttendanceCreateSerializer(attendance_obj)
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+
+
 class AttendanceListAPIView(ListAPIView):
     serializer_class = AttendanceListSerializer
     queryset = Attendance.objects.all()
