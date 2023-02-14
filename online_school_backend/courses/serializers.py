@@ -3,6 +3,23 @@ from users.models import UserProfile
 from .models import Course, Enrolment
 from rest_framework.serializers import ModelSerializer
 from rest_framework.serializers import SerializerMethodField
+from users.serializers import StudentListAllSerializer
+
+
+class StudentSerializer(ModelSerializer):
+    fullname = SerializerMethodField()
+
+    def get_fullname(self, instance):
+        name = ""
+        if instance.user.first_name:
+            name += instance.user.first_name + " "
+        if instance.user.last_name:
+            name += instance.user.last_name
+        return name
+
+    class Meta:
+        model = UserProfile
+        fields = ["roll", 'fullname']
 
 
 class CourseListSerializer(ModelSerializer):
