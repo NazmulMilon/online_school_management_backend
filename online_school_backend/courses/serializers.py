@@ -4,6 +4,7 @@ from .models import Course, Enrolment, Attendance
 from rest_framework.serializers import ModelSerializer
 from rest_framework.serializers import SerializerMethodField
 from users.serializers import StudentListAllSerializer
+from rest_framework import serializers
 
 
 class StudentSerializer(ModelSerializer):
@@ -178,22 +179,49 @@ class AttendanceRetrieveSerializer(ModelSerializer):
     def get_course_name(self, instance):
         return instance.course.course_name if instance.course else ""
 
+    def get_student(self, instance):
+        student_id_lst = []
+        attendance_qs = Attendance.objects.filter(course=instance.course, created_at__date=instance.created_at)
+        for attendance_obj in attendance_qs:
+            student_profile = UserProfile.objects.filter(user=attendance_obj.student).first()
+            data_dict = {
+                'student_id': attendance_obj.student_id,
+                'student_name': attendance_obj.student.username,
+                'is_present': attendance_obj.is_present,
+                'roll': student_profile.roll if student_profile else ""
+            }
+            student_id_lst.append(data_dict)
+        print(student_id_lst)
+        return student_id_lst
+
     # def get_student(self, instance):
     #     queryset = Attendance.objects.filter(id=instance.student_id)
     #     return AttendanceSerializer(queryset, many=True).data
 
-    def get_student(self, instance):
-        student_id_lst = []
-        attendance_qs = Attendance.objects.filter(course=instance.course).values('student_id')
-        for item in attendance_qs:
-            if item['student_id'] not in student_id_lst:
-                student_id_lst.append(item['student_id'])
-        student_qs = UserProfile.objects.filter(pk__in=student_id_lst).order_by('roll')
-        return StudentSerializer(student_qs, many=True).data
+    # def get_student(self, instance):
+    #     student_id_lst = []
+    #     attendance_qs = Attendance.objects.filter(course=instance.course)
+    #     for attendance_obj in attendance_qs:
+    #         data_dict = {
+    #             'student_id': attendance_obj.student_id,
+    #             'student_name': attendance_obj.student.username,
+    #             'is_present': attendance_obj.is_present,
+    #             # 'roll': instance.student.userprofile.roll
+    #         }
+    #         student_id_lst.append(data_dict)
+    #
+    #     return TestSerializer(student_id_lst).data
 
     class Meta:
         model = Attendance
-        exclude = ['created_at', 'updated_at', 'course', 'is_present', 'created_by', 'updated_by']
+        exclude = ['course', 'is_present', 'created_by', 'updated_by']
+
+
+class TestSerializer(serializers.Serializer):
+    student_id = serializers.IntegerField()
+    student_name = serializers.CharField()
+    is_present = serializers.BooleanField()
+    # roll = serializers.IntegerField()
 
 
 class AttendanceCreateSerializer(ModelSerializer):
