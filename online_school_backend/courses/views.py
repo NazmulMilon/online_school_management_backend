@@ -180,3 +180,7 @@ class AttendanceRetrieveByDate(RetrieveAPIView):
 
         serializer = AttendanceRetrieveSerializer(queryset, many=False)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+def TestGithub(self):
+    return True
