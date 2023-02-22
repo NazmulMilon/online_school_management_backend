@@ -157,6 +157,12 @@ class AttendanceListAPIView(ListAPIView):
     queryset = Attendance.objects.all()
 
     def get(self, request, *args, **kwargs):
+        queryset = Attendance.objects.all()
+        serializer = AttendanceListSerializer(queryset, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+    def get(self, request, *args, **kwargs):
         date = request.data.get('date', None)
 
         # unique_course_qs = Attendance.objects.filter(created_at__date=date).values('course_id').distinct()
