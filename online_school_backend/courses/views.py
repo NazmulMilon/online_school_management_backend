@@ -162,6 +162,10 @@ class AttendanceListAPIView(ListAPIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
+class AttendanceRetrieveByDate(RetrieveAPIView):
+    serializer_class = AttendanceRetrieveSerializer
+    queryset = Attendance.objects.all()
+
     def get(self, request, *args, **kwargs):
         date = request.data.get('date', None)
 
