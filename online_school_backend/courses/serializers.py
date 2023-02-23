@@ -181,7 +181,7 @@ class AttendanceRetrieveSerializer(ModelSerializer):
 
     def get_student(self, instance):
         student_id_lst = []
-        attendance_qs = Attendance.objects.filter(course=instance.course, created_at__date=instance.created_at)
+        attendance_qs = Attendance.objects.filter(teacher_id=instance.teacher, course=instance.course, created_at__date=instance.created_at)
         for attendance_obj in attendance_qs:
             student_profile = UserProfile.objects.filter(user=attendance_obj.student).first()
             data_dict = {
