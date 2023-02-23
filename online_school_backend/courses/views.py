@@ -9,6 +9,7 @@ from .serializers import CourseCreateSerializer, CourseRetrieveSerializer, Cours
 from rest_framework.generics import CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView
 from rest_framework.response import Response
 from rest_framework import status
+import datetime
 
 
 class CourseListAPIView(ListAPIView):
@@ -127,9 +128,12 @@ class AttendanceCreateAPIView(CreateAPIView):
             return Response(data={'details': 'course not found.'}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
         student_id = data.get('student', None)
+        if Attendance.objects.filter(student_id=student_id, teacher_id=teacher_id, course_id=course_id,
+                                     created_at__date=datetime.date.today()).exists():
+            return Response(data={'details': 'Attendance already given.'}, status=status.HTTP_406_NOT_ACCEPTABLE)
         if student_id is None:
             return Response(data={'details': 'Student id required.'}, status=status.HTTP_406_NOT_ACCEPTABLE)
-        if not UserProfile.objects.filter(id=student_id, user_role="STUDENT").exists():
+        if not UserProfile.objects.filter(user_id=student_id, user_role="STUDENT").exists():
             return Response(data={'details': 'student does not found.'}, status=status.HTTP_406_NOT_ACCEPTABLE)
 
         is_present = data.get('is_present', None)
