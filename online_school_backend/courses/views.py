@@ -172,6 +172,8 @@ class AttendanceRetrieveByDate(RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         date = request.data.get('date', None)
+        teacher = request.data.get('teacher', None)
+        course = request.data.get('course', None)
 
         # unique_course_qs = Attendance.objects.filter(created_at__date=date).values('course_id').distinct()
         # course_list = []
@@ -180,7 +182,7 @@ class AttendanceRetrieveByDate(RetrieveAPIView):
         #
         # print(course_list)
         # queryset = Attendance.objects.filter(created_at__date=date, course__in=course_list).first()
-        queryset = Attendance.objects.filter(created_at__date=date).first()
+        queryset = Attendance.objects.filter(teacher_id=teacher, course_id=course, created_at__date=date).first()
 
         serializer = AttendanceRetrieveSerializer(queryset, many=False)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
