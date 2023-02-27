@@ -124,6 +124,25 @@ class UserRetrieveSerializer(ModelSerializer):
 
 
 class EnrollmentSerializer(ModelSerializer):
+    course_code = SerializerMethodField()
+    course_name = SerializerMethodField()
+    username = SerializerMethodField()
+
+    # user_role = SerializerMethodField()
+
+    def get_course_code(self, instance):
+        return instance.course.course_code if instance.course else ""
+
+    def get_course_name(self, instance):
+        return instance.course.course_name if instance.course else ""
+
+    def get_username(self, instance):
+        return instance.user.username if instance.user else ""
+
+    # def get_user_role(self, instance):
+    #     profile_qs = UserProfile.objects.filter(user=instance.user)
+    #     return profile_qs.user_role if instance.user else ""
+
     class Meta:
         model = Enrolment
         exclude = ['created_at', 'updated_at']
