@@ -3,9 +3,9 @@ from django.contrib.auth.models import User
 from users.models import UserProfile
 from .models import Course, Enrolment, Attendance
 from .serializers import CourseCreateSerializer, CourseRetrieveSerializer, CourseListSerializer, \
-    EnrolmentListSerializer, UserRetrieveSerializer, EnrolmentSerializer, EnrollmentSerializer, \
+    EnrolmentListSerializer, UserRetrieveSerializer, EnrollmentSerializer, \
     EnrolmentRetrieveByCourseSerializer, AttendanceListSerializer, AttendanceCreateSerializer, \
-    AttendanceRetrieveSerializer
+    AttendanceRetrieveSerializer, EnrollmentRetrieveSerializer
 from rest_framework.generics import CreateAPIView, RetrieveAPIView, ListAPIView, UpdateAPIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -186,7 +186,3 @@ class AttendanceRetrieveByDate(RetrieveAPIView):
 
         serializer = AttendanceRetrieveSerializer(queryset, many=False)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
-
-
-def TestGithub(self):
-    return True
