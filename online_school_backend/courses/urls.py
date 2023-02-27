@@ -10,8 +10,8 @@ urlpatterns = [
     # enrollment
     path('enrollment/all/', EnrollmentListAPIView().as_view(), name='all_enrollment'),
     path('enrollment/create/', EnrollmentCreateAPIView.as_view(), name='create_enrollment'),
-    path('enrolment/retrieve/<int:user>/', EnrolmentRetrieveAPIView.as_view(), name='retrieve_enrollment'),
-    path('enrolment/retrieve/course/<int:course>/', EnrolmentRetrieveByCourseAPIView.as_view(),
+    path('enrollment/retrieve/<int:user>/', EnrolmentRetrieveAPIView.as_view(), name='retrieve_enrollment'),
+    path('enrollment/retrieve/course/<int:course>/', EnrolmentRetrieveByCourseAPIView.as_view(),
          name='retrieve_enrolment_by_course'),
 
     # attendance
