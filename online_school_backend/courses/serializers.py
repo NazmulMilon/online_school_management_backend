@@ -47,12 +47,6 @@ class UserSerializer(ModelSerializer):
         fields = ['username']
 
 
-class EnrolmentSerializer(ModelSerializer):
-    class Meta:
-        model = Enrolment
-        exclude = ['created_at', 'updated_at']
-
-
 class EnrolmentListSerializer(ModelSerializer):
     user = SerializerMethodField()
     fullname = SerializerMethodField()
