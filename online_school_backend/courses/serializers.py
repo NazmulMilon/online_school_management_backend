@@ -200,7 +200,8 @@ class AttendanceRetrieveSerializer(ModelSerializer):
 
     def get_student(self, instance):
         student_id_lst = []
-        attendance_qs = Attendance.objects.filter(teacher_id=instance.teacher, course=instance.course, created_at__date=instance.created_at)
+        attendance_qs = Attendance.objects.filter(teacher_id=instance.teacher, course=instance.course,
+                                                  created_at__date=instance.created_at)
         for attendance_obj in attendance_qs:
             student_profile = UserProfile.objects.filter(user=attendance_obj.student).first()
             data_dict = {
@@ -210,7 +211,7 @@ class AttendanceRetrieveSerializer(ModelSerializer):
                 'roll': student_profile.roll if student_profile else ""
             }
             student_id_lst.append(data_dict)
-        print(student_id_lst)
+        # print(student_id_lst)
         return student_id_lst
 
     # def get_student(self, instance):
