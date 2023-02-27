@@ -129,6 +129,12 @@ class EnrollmentSerializer(ModelSerializer):
         exclude = ['created_at', 'updated_at']
 
 
+class EnrollmentRetrieveSerializer(ModelSerializer):
+    class Meta:
+        model = Enrolment
+        exclude = ['created_at', 'updated_at']
+
+
 class UserProfileListSerializer(ModelSerializer):
     class Meta:
         model = UserProfile
