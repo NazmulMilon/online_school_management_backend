@@ -1,10 +1,11 @@
 from django.urls import path
 from .views import CourseListAPIView, EnrollmentListAPIView, EnrollmentCreateAPIView, EnrolmentRetrieveAPIView, \
     EnrolmentRetrieveByCourseAPIView, AttendanceListAPIView, AttendanceRetrieveAPIView, AttendanceCreateAPIView, \
-    AttendanceRetrieveByDate
+    AttendanceRetrieveByDate, CourseFilter
 
 urlpatterns = [
     path('course/all/', CourseListAPIView.as_view(), name='all_course'),
+    path('course/filter/', CourseFilter.as_view(), name='course_filter'),
 
 
     # enrollment
