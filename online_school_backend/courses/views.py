@@ -11,6 +11,11 @@ from rest_framework.response import Response
 from rest_framework import status
 import datetime
 
+# django_filters
+from django_filters import rest_framework as filters
+from rest_framework import generics
+from .filters import CourseFilter
+
 
 class CourseListAPIView(ListAPIView):
     serializer_class = CourseListSerializer
@@ -186,3 +191,11 @@ class AttendanceRetrieveByDate(RetrieveAPIView):
 
         serializer = AttendanceRetrieveSerializer(queryset, many=False)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class CourseFilter(generics.ListAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseListSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    # filterset_fields = ('course_code', 'course_name')
+    filterset_class = CourseFilter
